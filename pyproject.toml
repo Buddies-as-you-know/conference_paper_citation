@@ -12,6 +12,7 @@ httpx = "^0.25.0"
 jinja2 = "^3.1.2"
 requests = "^2.31.0"
 pytest = "^7.4.3"
+semanticscholar = "^0.5.0"
 
 
 [tool.poetry.group.dev.dependencies]
