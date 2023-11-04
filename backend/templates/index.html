@@ -1,17 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venue Search</title>
-</head>
-<body>
-
-<form action="/search/" method="post">
-    <label for="venue">Venue:</label>
-    <input type="text" id="venue" name="venue" required>
-    <button type="submit">Search</button>
-</form>
-
-</body>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Venue Search</title>
+      <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        
+        form input[type="checkbox"],
+        form input[type="radio"],
+        form input[type="text"],
+        form input[type="submit"] {
+            margin: 5px 10px 5px 0;
+        }
+        
+        form input[type="text"] {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 6px 10px;
+            width: 100px;
+        }
+        
+        form input[type="submit"] {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        
+        form input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+        
+        label {
+            margin-right: 20px;
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
+        }
+        
+        .form-section label,
+        .form-section input {
+            vertical-align: middle;
+        }
+        
+        /* Add some spacing and better alignment for the labels */
+        .form-section label {
+            display: inline-block;
+            width: 140px;
+        }
+        
+        /* Styling for headings inside the form for better section division */
+        .form-heading {
+            padding: 10px 0;
+            border-bottom: 1px solid #e7e7e7;
+            margin-bottom: 10px;
+        }
+    </style>
+   </head>
+   <body>
+      <form action="/search/" method="post">
+         <input type="checkbox" name="venues" value="STOC">STOC
+         <input type="checkbox" name="venues" value="FOCS">FOCS
+         <input type="checkbox" name="venues" value="SODA">SODA
+         <input type="checkbox" name="venues" value="AAAI">AAAI
+         <input type="checkbox" name="venues" value="IJCAI">IJCAI
+         <input type="checkbox" name="venues" value="NeurIPS">NeurIPS
+         <input type="checkbox" name="venues" value="ICML">ICML
+         <input type="checkbox" name="venues" value="ICLR">ICLR
+         <input type="checkbox" name="venues" value="AISTATS">AISTATS
+         <input type="checkbox" name="venues" value="KDD">KDD
+         <input type="checkbox" name="venues" value="ICDM">ICDM
+         <input type="checkbox" name="venues" value="CIKM">CIKM
+         <input type="checkbox" name="venues" value="SDM">SDM
+         <input type="checkbox" name="venues" value="WWW">WWW
+         <input type="checkbox" name="venues" value="WSDM">WSDM
+         <input type="checkbox" name="venues" value="SIGIR">SIGIR
+         <input type="checkbox" name="venues" value="RecSys">RecSys
+         <!-- 他の会場のオプションを追加する -->
+         <input type="checkbox" name="venues" value="IEEE International Conference on Robotics and Automation">ICRA
+         <input type="checkbox" name="venues" value="ACL">ACL
+         <input type="checkbox" name="venues" value="IEEE/RJS International Conference on Intelligent Robots and Systems">IROS
+         <input type="submit" value="Submit">
+      </form>
+   </body>
 </html>

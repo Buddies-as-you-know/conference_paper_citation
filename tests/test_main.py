@@ -1,28 +1,61 @@
+# Replace 'main' with the actual name of your file where the FastAPI app is defined
+import pytest
+import requests_mock
 from fastapi.testclient import TestClient
 
 from backend.main import (
-    app,  # プロジェクトのディレクトリ構造に応じて適切なインポートパスを使用してください。
+    app,
 )
 
 client = TestClient(app)
 
+# This test assumes you have a 'requests_mock' fixture available.
+# You may need to install 'pytest-requests-mock' or similar library and set it up accordingly.
 
-def test_search_venue() -> None:
-    # 正常なリクエストのテスト
-    response = client.post(
-        "/search/", data={"venue": "IEEE International Conference on Robotics and Automation"}
-    )
+
+@pytest.fixture
+def mock_request():
+    with requests_mock.Mocker() as m:
+        yield m
+
+
+def test_search_venue_success(mock_request):
+    # Mock the response from the external API
+    endpoint = "https://api.semanticscholar.org/graph/v1/paper/search/bulk"
+    mock_data = {
+        "total": 1,
+        "data": [
+            {
+                "title": "Example Paper",
+                "year": 2021,
+                "referenceCount": 10,
+                "citationCount": 5,
+                "influentialCitationCount": 1,
+                "isOpenAccess": True,
+                "fieldsOfStudy": ["Computer Science"],
+                "authors": [{"authorId": "1234", "name": "John Doe"}],
+                "venue": "Example Venue",
+            }
+        ],
+    }
+    mock_request.get(endpoint, json=mock_data)
+
+    # Call the endpoint
+    response = client.post("/search/", data={"venues": ["Example Venue"]})
+
+    # Check that the response is as expected
     assert response.status_code == 200
-    data = response.json()
-    assert "total" in data
-    assert "sorted_data" in data
+    assert response.json() == {"total": 1, "sorted_data": mock_data["data"]}
 
-    # APIエラーのテスト（例：存在しないvenueを指定）
-    response = client.post("/search/", data={"venue": "NonExistentVenue"})
-    assert response.status_code == 400  # もしくはAPIが返す適切なエラーコード
-    assert "error" in response.json()
 
-    # venueパラメータがない場合のテスト
-    response = client.post("/search/")
-    assert response.status_code == 422
-    assert "detail" in response.json()
+def test_search_venue_api_failure(mock_request):
+    # Mock the response to simulate an API failure
+    endpoint = "https://api.semanticscholar.org/graph/v1/paper/search/bulk"
+    mock_request.get(endpoint, status_code=500)
+
+    # Call the endpoint
+    response = client.post("/search/", data={"venues": ["Bad Venue"]})
+
+    # Check that the response indicates an API request failure
+    assert response.status_code == 500
+    assert response.json() == {"error": "API request failed for all venues"}

@@ -1,7 +1,7 @@
-import json
 import logging
 import pathlib
-from typing import Dict
+from operator import itemgetter
+from typing import Dict, List
 
 import requests
 from fastapi import FastAPI, Form, Request  # <- Formを追加
@@ -20,7 +20,7 @@ async def read_root(request: Request) -> Response:
 
 
 @app.post("/search/")
-async def search_venue(venue: str = Form(...)) -> JSONResponse:
+async def search_venue(venues: List[str] = Form(...)) -> JSONResponse:
     endpoint = "https://api.semanticscholar.org/graph/v1/paper/search/bulk"
     fields = (
         "title",
@@ -33,28 +33,32 @@ async def search_venue(venue: str = Form(...)) -> JSONResponse:
         "authors",
         "venue",
     )
-    params: Dict[str, str] = {"venue": venue, "fields": ",".join(fields)}
+    all_papers = []
+    total_count = 0
 
-    # APIへのリクエスト情報をログに記録
-    logging.info(f"Sending request to {endpoint} with parameters: {params}")
+    for venue in venues:
+        params: Dict[str, str] = {"venue": venue, "fields": ",".join(fields)}
+        r = requests.get(url=endpoint, params=params)
+        if r.status_code != 200:
+            logging.error(f"Error in API response for venue {venue}: {r.text}")
+            continue  # Skip this venue and continue with the next one
 
-    r = requests.get(url=endpoint, params=params)
+        r_dict = r.json()
+        total = r_dict.get("total", 0)
+        total_count += total
+        data = r_dict.get("data", [])
+        all_papers.extend(data)
 
-    # レスポンスのステータスコードをログに記録
-    logging.info(f"Received response with status code {r.status_code}")
+        # Optional: If you want to include some delay between API calls to avoid hitting rate limits
+        # time.sleep(1)
 
-    if r.status_code != 200:
-        logging.error(f"Error in API response: {r.text}")
-        return JSONResponse(
-            content={"error": "API request failed", "details": r.text}, status_code=r.status_code
-        )
+    if not all_papers:
+        return JSONResponse(content={"error": "API request failed for all venues"}, status_code=500)
 
-    r_dict = json.loads(r.text)
-    total = r_dict["total"]
-    data = r_dict["data"]
-    sorted_data = sorted(data, key=lambda x: int(x["influentialCitationCount"]), reverse=True)
+    # Sort the aggregated results by 'influentialCitationCount'
+    sorted_data = sorted(all_papers, key=itemgetter("influentialCitationCount"), reverse=True)
 
     # 結果の要約をログに記録
-    logging.info(f"Total papers found: {total}")
+    logging.info(f"Total papers found across all venues: {total_count}")
 
-    return JSONResponse(content={"total": total, "sorted_data": sorted_data})
+    return JSONResponse(content={"total": total_count, "sorted_data": sorted_data})
