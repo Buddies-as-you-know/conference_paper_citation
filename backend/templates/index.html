@@ -1,104 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Venue Search</title>
-      <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venue Search</title>
+    <style>
         
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 20px auto;
-        }
-        
-        form input[type="checkbox"],
-        form input[type="radio"],
-        form input[type="text"],
-        form input[type="submit"] {
-            margin: 5px 10px 5px 0;
-        }
-        
-        form input[type="text"] {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 6px 10px;
-            width: 100px;
-        }
-        
-        form input[type="submit"] {
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        
-        form input[type="submit"]:hover {
-            background-color: #4cae4c;
-        }
-        
-        label {
-            margin-right: 20px;
-        }
-        
-        .form-section {
-            margin-bottom: 20px;
-        }
-        
-        .form-section label,
-        .form-section input {
-            vertical-align: middle;
-        }
-        
-        /* Add some spacing and better alignment for the labels */
-        .form-section label {
-            display: inline-block;
-            width: 140px;
-        }
-        
-        /* Styling for headings inside the form for better section division */
-        .form-heading {
-            padding: 10px 0;
-            border-bottom: 1px solid #e7e7e7;
-            margin-bottom: 10px;
-        }
     </style>
-   </head>
-   <body>
-      <form action="/search/" method="post">
-         <input type="checkbox" name="venues" value="STOC">STOC
-         <input type="checkbox" name="venues" value="FOCS">FOCS
-         <input type="checkbox" name="venues" value="SODA">SODA
-         <input type="checkbox" name="venues" value="AAAI">AAAI
-         <input type="checkbox" name="venues" value="IJCAI">IJCAI
-         <input type="checkbox" name="venues" value="NeurIPS">NeurIPS
-         <input type="checkbox" name="venues" value="ICML">ICML
-         <input type="checkbox" name="venues" value="ICLR">ICLR
-         <input type="checkbox" name="venues" value="AISTATS">AISTATS
-         <input type="checkbox" name="venues" value="KDD">KDD
-         <input type="checkbox" name="venues" value="ICDM">ICDM
-         <input type="checkbox" name="venues" value="CIKM">CIKM
-         <input type="checkbox" name="venues" value="SDM">SDM
-         <input type="checkbox" name="venues" value="WWW">WWW
-         <input type="checkbox" name="venues" value="WSDM">WSDM
-         <input type="checkbox" name="venues" value="SIGIR">SIGIR
-         <input type="checkbox" name="venues" value="RecSys">RecSys
-         <!-- 他の会場のオプションを追加する -->
-         <input type="checkbox" name="venues" value="IEEE International Conference on Robotics and Automation">ICRA
-         <input type="checkbox" name="venues" value="ACL">ACL
-         <input type="checkbox" name="venues" value="IEEE/RJS International Conference on Intelligent Robots and Systems">IROS
-         <input type="submit" value="Submit">
-      </form>
-   </body>
+</head>
+<body>
+    <div class="container">
+        <form action="/search/" method="post">
+            <div class="form-sections">
+                <!-- Conferences Section -->
+                <div class="form-section conferences">
+                     <button type="button" id="checkAll">Check All</button> 
+                    <button type="button" id="uncheckAll">Uncheck All</button>
+                 <label for="query">Query</label>
+                <input type="text" id="query" name="query">
+                    <h2>Conferences</h2>
+                <!-- NLP Section -->
+                <div class="form-subsection">
+                    <h3>NLP (Natural Language Processing)</h3>
+                   <input type="checkbox" name="venues" value="AACL">AACL
+                    <input type="checkbox" name="venues" value="ACL">ACL
+                    <input type="checkbox" name="venues" value="ANLP">ANLP
+                    <input type="checkbox" name="venues" value="CL">CL
+                    <input type="checkbox" name="venues" value="CoNLL">CoNLL
+                    <input type="checkbox" name="venues" value="EACL">EACL
+                    <input type="checkbox" name="venues" value="EMNLP">EMNLP
+                    <input type="checkbox" name="venues" value="Findings">Findings
+                    <input type="checkbox" name="venues" value="IWSLT">IWSLT
+                    <input type="checkbox" name="venues" value="NAACL">NAACL
+                    <input type="checkbox" name="venues" value="SemEval">SemEval
+                    <input type="checkbox" name="venues" value="TACL">TACL
+                    <input type="checkbox" name="venues" value="WMT">WMT
+                    <input type="checkbox" name="venues" value="WS">WS
+                    <input type="checkbox" name="venues" value="SIGsANN">SIGsANN
+                    <input type="checkbox" name="venues" value="BIOMED">BIOMED
+                    <input type="checkbox" name="venues" value="DAT">DAT
+                    <input type="checkbox" name="venues" value="DIAL">DIAL
+                    <input type="checkbox" name="venues" value="EDU">EDU
+                    <input type="checkbox" name="venues" value="EL">EL
+                    <input type="checkbox" name="venues" value="FSM">FSM
+                    <input type="checkbox" name="venues" value="GEN">GEN
+                    <input type="checkbox" name="venues" value="HAN">HAN
+                    <input type="checkbox" name="venues" value="HUM">HUM
+                    <input type="checkbox" name="venues" value="LEX">LEX
+                    <input type="checkbox" name="venues" value="MEDIA">MEDIA
+                    <input type="checkbox" name="venues" value="MOL">MOL
+                    <input type="checkbox" name="venues" value="MORPHON">MORPHON
+                    <input type="checkbox" name="venues" value="MT">MT
+                    <input type="checkbox" name="venues" value="NLL">NLL
+                    <input type="checkbox" name="venues" value="PARSE">PARSE
+                    <input type="checkbox" name="venues" value="REP">REP
+                    <input type="checkbox" name="venues" value="SEM">SEM
+                    <input type="checkbox" name="venues" value="SEMITIC">SEMITIC
+                    <input type="checkbox" name="venues" value="SLAV">SLAV
+                    <input type="checkbox" name="venues" value="SLPAT">SLPAT
+                    <input type="checkbox" name="venues" value="SLT">SLT
+                    <input type="checkbox" name="venues" value="TYP">TYP
+                    <input type="checkbox" name="venues" value="UL">UL
+                    <input type="checkbox" name="venues" value="UR">UR
+                    <input type="checkbox" name="venues" value="WAC">WAC
+                    <!-- Non-ACL Events -->
+                    <input type="checkbox" name="venues" value="ALTA">ALTA
+                    <input type="checkbox" name="venues" value="AMTA">AMTA
+                    <input type="checkbox" name="venues" value="CCL">CCL
+                    <input type="checkbox" name="venues" value="COLING">COLING
+                    <input type="checkbox" name="venues" value="EAMT">EAMT
+                    <input type="checkbox" name="venues" value="HLT">HLT
+                    <input type="checkbox" name="venues" value="IJCLCLP">IJCLCLP
+                    <input type="checkbox" name="venues" value="IJCNLP">IJCNLP
+                    <input type="checkbox" name="venues" value="JEP/TALN/RECITAL">JEP/TALN/RECITAL
+                    <input type="checkbox" name="venues" value="KONVENS">KONVENS
+                    <input type="checkbox" name="venues" value="LILT">LILT
+                    <input type="checkbox" name="venues" value="LREC">LREC
+                    <input type="checkbox" name="venues" value="MTSummit">MTSummit
+                    <input type="checkbox" name="venues" value="MUC">MUC
+                    <input type="checkbox" name="venues" value="NEJLT">NEJLT
+                    <input type="checkbox" name="venues" value="PACLIC">PACLIC
+                    <input type="checkbox" name="venues" value="RANLP">RANLP
+                    <input type="checkbox" name="venues" value="ROCLING">ROCLING
+                    <input type="checkbox" name="venues" value="TAL">TAL
+                    <input type="checkbox" name="venues" value="TINLAP">TINLAP
+                    <input type="checkbox" name="venues" value="TIPSTER">TIPSTER
+                </div>
+    
+                <!-- ML & AI Section -->
+                <div class="form-subsection">
+                    <h3>ML (Machine Learning) & AI (Artificial Intelligence)</h3>
+                    <input type="checkbox" name="venues" value="NeurIPS">NeurIPS
+                    <input type="checkbox" name="venues" value="ICML">ICML
+                    <input type="checkbox" name="venues" value="ICLR">ICLR
+                    <input type="checkbox" name="venues" value="AAAI">AAAI
+                    <input type="checkbox" name="venues" value="IJCAI">IJCAI
+                    <input type="checkbox" name="venues" value="KDD">KDD
+                    <input type="checkbox" name="venues" value="AISTATS">AISTATS
+                    <input type="checkbox" name="venues" value="UAI">UAI
+                    <input type="checkbox" name="venues" value="ECML PKDD">ECML PKDD
+                    <input type="checkbox" name="venues" value="SDM">SDM
+                    <input type="checkbox" name="venues" value="CIKM">CIKM
+                    <input type="checkbox" name="venues" value="SIGIR">SIGIR
+                    <input type="checkbox" name="venues" value="World AI Cannes Festival">World AI Cannes Festival
+                    <input type="checkbox" name="venues" value="AI Summit West">AI Summit West
+                    <input type="checkbox" name="venues" value="NVIDIA GTC">NVIDIA GTC
+                    <input type="checkbox" name="venues" value="World Summit AI Americas">World Summit AI Americas
+                    <input type="checkbox" name="venues" value="Machine Learning Week">Machine Learning Week
+                    <input type="checkbox" name="venues" value="The AI Summit London">The AI Summit London
+                    <input type="checkbox" name="venues" value="MLCON">MLCON
+                </div>
+                <div class="form-subsection">
+                    <h3>CV(Computer Vision)</h3>
+                    <input type="checkbox" name="venues" value="SIGGRAPH">SIGGRAPH
+                    <input type="checkbox" name="venues" value="ECCV">ECCV 
+                    <input type="checkbox" name="venues" value="CVPR">CVPR
+                    <input type="checkbox" name="venues" value="ICCV">ICCV 
+                    <input type="checkbox" name="venues" value="ICPR">ICPR
+                    <input type="checkbox" name="venues" value="ICIP">ICIP 
+                    <input type="checkbox" name="venues" value="BMVC">BMVC
+                    <input type="checkbox" name="venues" value="ICMR">ICMR
+                    <input type="checkbox" name="venues" value="ACMMM">ACMMM
+                    <!-- 他のML & AI関連のカンファレンスのチェックボックスを追加 -->
+                </div>
+                <!-- Robotics Section -->
+               <div class="form-subsection">
+                    <h3>Robotics</h3>
+                    <input type="checkbox" name="venues" value="ICRA">ICRA
+                    <input type="checkbox" name="venues" value="IROS">IROS
+                    <input type="checkbox" name="venues" value="RO-MAN">RO-MAN
+                    <input type="checkbox" name="venues" value="ISR">ISR
+                    <input type="checkbox" name="venues" value="ISR">ISR
+                    <input type="checkbox" name="venues" value="FSR">FSR
+                    <input type="checkbox" name="venues" value="RSS">RSS
+                    <input type="checkbox" name="venues" value="CASE">CASE
+                    <!-- 他のロボティクス関連のカンファレンスのチェックボックスを追加 -->
+                </div>
+            </div>
+            <div class="form-section">
+                <h2>Journals</h2>
+                <div class="form-subsection">
+                    <h3>NLP (Natural Language Processing)</h3>
+                    <input type="checkbox" name="venues" value="Transactions of the Association for Computational Linguistics">Transactions of the Association for Computational Linguistics
+                    <input type="checkbox" name="venues" value="Journal of Artificial Intelligence Research">Journal of Artificial Intelligence Research
+                    <input type="checkbox" name="venues" value="ComputationalLinguistics">Computational Linguistics
+                    <input type="checkbox" name="venues" value="IEEEAudioSpeechLangProc">IEEE Transactions on Audio, Speech and Language Processing
+                    <input type="checkbox" name="venues" value="TALIP">TALIP (ACM)
+                    <input type="checkbox" name="venues" value="MTSpringer">MT (Springer)
+                    <input type="checkbox" name="venues" value="LangResEval">Language Resources & Evaluations (Springer)
+                    <input type="checkbox" name="venues" value="JNLE">Journal of Natural Language Engineering (Cambridge)
+                    <input type="checkbox" name="venues" value="AICom">AI Communications (IOS Press)
+                    <input type="checkbox" name="venues" value="JNCA">Journal of Network and Computer Applications (Elsevier)
+                    <input type="checkbox" name="venues" value="JASIST">Journal of the Association for Information Science and Technology (Wiley)
+                    <input type="checkbox" name="venues" value="JAMIA">Journal of the American Medical Informatics Association (Oxford)
+                    <input type="checkbox" name="venues" value="JDIQ">Journal of Data and Information Quality (ACM)
+                    <input type="checkbox" name="venues" value="JASIST">Journal of the Association for Information Science and Technology (Wiley)
+                    <input type="checkbox" name="venues" value="JDIQ">Journal of Data and Information Quality (ACM)
+                    
+
+                </div>
+                <!-- Computer Science Section -->
+                <div class="form-subsection">
+
+                    <h3>Computer Science</h3>
+                    <input type="checkbox" name="venues" value="TOCS">TOCS - ACM Transactions on Computer Systems
+                    <input type="checkbox" name="venues" value="JACM">JACM - Journal of the ACM
+                    <!-- 他のコンピュータサイエンス関連のジャーナルのチェックボックスを追加 -->
+                </div>
+                
+                <div class="form-subsection">
+                    <h3>AI (Artificial Intelligence) & ML (Machine Learning)</h3>
+                    <input type="checkbox" name="venues" value="Transactions of the Association for Computational Linguistics">JMLR - Journal of Machine Learning Research
+                    <input type="checkbox" name="venues" value="Nature Machine Intelligence">Nature Machine Intelligence
+                    <input type="checkbox" name="venues" value="IEEE Transactions on Pattern Analysis and Machine Intelligence">IEEE Transactions on Pattern Analysis and Machine Intelligence
+                    <input type="checkbox" name="venues" value="ACM Transactions on Artificial Intelligence">ACM Transactions on Artificial Intelligence
+                    <input type="checkbox" name="venues" value="Artificial Intelligence">Artificial Intelligence
+                    <input type="checkbox" name="venues" value="Journal of Artificial Intelligence Research">JAIR - Journal of Artificial Intelligence Research
+                    <input type="checkbox" name="venues" value="AI Magazine">AI Magazine
+                    <!-- 他のAI & ML関連のジャーナルのチェックボックスを追加 -->
+                </div>
+                <div class="form-subsection">
+                    <h3>CV(Computer Vision)</h3>
+                    <input type="checkbox" name="venues" value="IEEE Transactions on Pattern Analysis and Machine Intelligence">IEEE Transactions on Pattern Analysis and Machine Intelligence
+                    <input type="checkbox" name="venues" value="Computer Vision and Image Understanding">Computer Vision and Image Understanding
+                    <input type="checkbox" name="venues" value="International Journal of Computer Vision">International Journal of Computer Vision
+                </div>
+                
+            </div>
+            <div class="input-group">
+                <label for="year-from">Year (inclusive) from:</label>
+                <input type="number" id="year-from" name="year_from" min="1900" max="2099" step="1">
+                
+                <label for="year-to">to:</label>
+                <input type="number" id="year-to" name="year_to" min="1900" max="2099" step="1">
+            </div>
+            <div class="input-group">
+                <label for="citation-count-from">Citation Count (inclusive) from:</label>
+                <input type="number" id="citation-count-from" name="citation_count_from" min="0" step="1">
+                
+                <label for="citation-count-to">to:</label>
+                <input type="number" id="citation-count-to" name="citation_count_to" min="0" step="1">
+            </div>
+            <input type="submit" value="Submit">
+       </form>
+    </div>
+
+ 
+      <div class="footer">
+        <p>このサービスは<a href="https://www.semanticscholar.org/product/api" target="_blank" rel="noopener noreferrer">Semantic Scholar Open Research Corpus</a>をODC-BY <a href="https://opendatacommons.org/licenses/by/1-0/" target="_blank" rel="noopener noreferrer">ライセンス</a>のもと使用しています。</p>
+    </div>
+</body>
+<script> document.getElementById("checkAll").addEventListener("click", function() { var checkboxes = document.querySelectorAll('input[type="checkbox"]'); checkboxes.forEach(function(checkbox) { checkbox.checked = true; }); }); document.getElementById("uncheckAll").addEventListener("click", function() { var checkboxes = document.querySelectorAll('input[type="checkbox"]'); checkboxes.forEach(function(checkbox) { checkbox.checked = false; }); }); </script>
 </html>

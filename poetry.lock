@@ -210,6 +210,31 @@ files = [
 ]
 
 [[package]]
+name = "deno"
+version = "0.0.0"
+description = "python ffi for deno ops"
+optional = false
+python-versions = "*"
+files = [
+    {file = "deno-0.0.0-py3-none-any.whl", hash = "sha256:1bfb9f83051d536439dc635990e8252c4e7b87ffda01113130250a5b910cf685"},
+    {file = "deno-0.0.0.tar.gz", hash = "sha256:add3625f029560358903571bf0be55f7a1c6ca0c2e760a8dab76095cc6fb4f87"},
+]
+
+[[package]]
+name = "deta"
+version = "1.2.0"
+description = "Python SDK for Deta Base & Deta Drive."
+optional = false
+python-versions = "*"
+files = [
+    {file = "deta-1.2.0-py3-none-any.whl", hash = "sha256:f1592b8e1809c6d284754521c8bddc236736ed50df8cfecdde3ad4e86fdd8860"},
+    {file = "deta-1.2.0.tar.gz", hash = "sha256:2573504fc07f05e1118175221ebe2bbfb822b9903f8f268bf851613a5b279557"},
+]
+
+[package.extras]
+async = ["aiohttp (>=3,<4)"]
+
+[[package]]
 name = "dnspython"
 version = "2.4.2"
 description = "DNS toolkit"
@@ -1441,4 +1466,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "0fcd93d33509c36b1a94227ca73a6e76f1b2be750bfba8a9624965ba10755658"
+content-hash = "95d5613511b966c1adf0449a7ff23d47b7d656f069700865ed9f262fdaef2432"

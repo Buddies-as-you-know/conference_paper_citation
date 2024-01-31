@@ -17,6 +17,8 @@ requests = "^2.31.0"
 pytest = "^7.4.3"
 semanticscholar = "^0.5.0"
 requests-mock = "^1.11.0"
+deno = "^0.0.0"
+deta = "^1.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -27,7 +29,7 @@ pytest = "^7.4.3"
 
 [tool.ruff]
 target-version = "py310"
-line-length = 100
+line-length = 79
 select = [
   "E", # pycodestyle errors
   "W", # pycodestyle warnings
@@ -52,7 +54,7 @@ strict = true
 
 [tool.black]
 target-version= ['py310']
-line-length = 100
+line-length = 79
 
 [build-system]
 requires = ["poetry-core"]

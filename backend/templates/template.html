@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>論文検索結果</title>
+    <style>
+        /* ここにスタイルを追加 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>検索結果</h2>
+    <table>
+        <tr>
+            <th>会議</th>
+            <th>タイトル</th>
+            <th>年</th>
+            <th>url</th>
+            <th>影響引用数</th>
+            <th>引用数</th>
+        </tr>
+        {% for paper in papers %}
+        <tr>
+            <td>{{ paper.venue }}</td>
+            <td>{{ paper.title }}</td>
+            <td>{{ paper.year }}</td>
+            <td><a href="{{ paper.url }}">{{ paper.title }}</a></td>
+            <td>{{ paper.influentialCitationCount }}</td>
+            <td>{{ paper.citationCount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
