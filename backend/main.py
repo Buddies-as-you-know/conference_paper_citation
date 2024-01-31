@@ -2,7 +2,6 @@ import logging
 import pathlib
 from operator import itemgetter
 from typing import Dict, List, Optional
-from deta import Deta
 import requests
 from fastapi import FastAPI, Form, Request  # <- Formを追加
 from fastapi.responses import HTMLResponse, JSONResponse, Response
@@ -14,8 +13,6 @@ PATH_TEMPLATES = str(
 )
 app = FastAPI()
 templates = Jinja2Templates(directory=PATH_TEMPLATES)
-deta = Deta()
-users = deta.Base("fastapi-crud")
 
 
 @app.get("/")
