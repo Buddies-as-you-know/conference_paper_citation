@@ -5,7 +5,7 @@ dev:
 	poetry run uvicorn backend.main:app --reload
 
 run:
-	poetry run uvicorn backend.main:app --host 0.0.0.0 --port 8000
+	docker run -p 8000:8000 myapp
 
 test:
 	poetry run pytest
@@ -33,4 +33,4 @@ hadolint:
 	hadolint Dockerfile
 
 build:
-	docker image build -t fastapi-backend .
+	docker build -t myapp .

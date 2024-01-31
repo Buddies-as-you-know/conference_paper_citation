@@ -23,4 +23,5 @@ COPY backend/ ./backend/
 
 RUN poetry install --no-root --no-ansi
 
-CMD ["make", "run"]
+CMD ["poetry", "run", "uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
