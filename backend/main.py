@@ -1,11 +1,17 @@
 import logging
 import pathlib
 from operator import itemgetter
-from typing import Dict, List, Optional
 import requests
 from fastapi import FastAPI, Form, Request  # <- Formを追加
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.templating import Jinja2Templates
+import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import logging
+from typing import Dict, List, Tuple, Optional
+import httpx
+import asyncio
+from starlette.responses import Response  # 必要に応じて
 
 logging.basicConfig(level=logging.INFO)
 PATH_TEMPLATES = str(
@@ -20,18 +26,33 @@ async def read_root(request: Request) -> Response:
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.post("/search/", response_class=HTMLResponse)  # noqa: F821
+async def fetch_data_for_venue(
+    client: httpx.AsyncClient, endpoint: str, query_params: dict
+) -> dict:
+    try:
+        response = await client.get(endpoint, params=query_params)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            logging.error(f"Error in API response: {response.text}")
+            return {"total": 0, "data": []}
+    except Exception as e:
+        logging.error(f"Error fetching data: {e}")
+        return {"total": 0, "data": []}
+
+
+@app.post("/search/", response_class=HTMLResponse)
 async def search_venue(
     request: Request,
     venues: List[str] = Form(...),
     query: Optional[str] = Form(None),
-    year_from: Optional[int] = Form(None),  # 年の最小値
-    year_to: Optional[int] = Form(None),  # 年の最大値
-    citation_count_from: Optional[int] = Form(None),  # 引用数の最小値
-    citation_count_to: Optional[int] = Form(None),  # 引用数の最大値
+    year_from: Optional[int] = Form(None),
+    year_to: Optional[int] = Form(None),
+    citation_count_from: Optional[int] = Form(None),
+    citation_count_to: Optional[int] = Form(None),
 ) -> Response:
     endpoint = "https://api.semanticscholar.org/graph/v1/paper/search/bulk"
-    fields = (
+    fields = [
         "title",
         "year",
         "referenceCount",
@@ -41,57 +62,58 @@ async def search_venue(
         "fieldsOfStudy",
         "authors",
         "venue",
-    )
+    ]
     all_papers = []
     total_count = 0
 
-    for venue in venues:
-        query_params: Dict[str, str] = {
-            "query": query,
-            "venue": venue,
-            "fields": ",".join(fields),
-        }
-        # 'year' パラメータを <min>-<max> の形式で設定
-        if year_from is not None and year_to is not None:
-            query_params["year"] = f"{year_from}-{year_to}"
-        elif year_from is not None:
-            query_params["year"] = f"{year_from}-"
-        elif year_to is not None:
-            query_params["year"] = f"-{year_to}"
+    async with httpx.AsyncClient() as client:
+        tasks = []
+        for venue in venues:
+            query_params = {
+                "query": query,
+                "venue": venue,
+                "fields": ",".join(fields),
+            }
+            if year_from is not None and year_to is not None:
+                query_params["year"] = f"{year_from}-{year_to}"
+            elif year_from is not None:
+                query_params["year"] = f"{year_from}-"
+            elif year_to is not None:
+                query_params["year"] = f"-{year_to}"
 
-        # 'citationCount' パラメータを <min>-<max> の形式で設定
-        if citation_count_from is not None and citation_count_to is not None:
-            query_params[
-                "citationCount"
-            ] = f"{citation_count_from}-{citation_count_to}"
-        elif citation_count_from is not None:
-            query_params["citationCount"] = f"{citation_count_from}-"
-        elif citation_count_to is not None:
-            query_params["citationCount"] = f"-{citation_count_to}"
-        r = requests.get(url=endpoint, params=query_params)
-        if r.status_code != 200:
-            logging.error(f"Error in API response for venue {venue}: {r.text}")
-            continue  # Skip this venue and continue with the next one
-        r_dict = r.json()
-        total = r_dict.get("total", 0)
-        total_count += total
-        data = r_dict.get("data", [])
-        all_papers.extend(data)
+            if (
+                citation_count_from is not None
+                and citation_count_to is not None
+            ):
+                query_params["citationCount"] = (
+                    f"{citation_count_from}-{citation_count_to}"
+                )
+            elif citation_count_from is not None:
+                query_params["citationCount"] = f"{citation_count_from}-"
+            elif citation_count_to is not None:
+                query_params["citationCount"] = f"-{citation_count_to}"
+
+            tasks.append(fetch_data_for_venue(client, endpoint, query_params))
+
+        results = await asyncio.gather(*tasks)
+        for result in results:
+            total_count += result.get("total", 0)
+            all_papers.extend(result.get("data", []))
 
     if not all_papers:
         return JSONResponse(
             content={"error": "API request failed for all venues"},
             status_code=500,
         )
+
     for paper in all_papers:
         paper_id = paper.get("paperId", "")
         paper["url"] = f"https://www.semanticscholar.org/paper/{paper_id}"
-    # Sort the aggregated results by 'influentialCitationCount'
+
     sorted_data = sorted(
-        all_papers, key=itemgetter("influentialCitationCount"), reverse=True
+        all_papers, key=itemgetter("citationCount"), reverse=True
     )
 
-    # 結果の要約をログに記録
     logging.info(f"Total papers found across all venues: {total_count}")
 
     return templates.TemplateResponse(

@@ -4,7 +4,11 @@
 dev:
 	poetry run uvicorn backend.main:app --reload
 
+build:
+	docker build -t myapp .
+
 run:
+	docker build -t myapp .
 	docker run -p 8000:8000 myapp
 
 test:
@@ -32,5 +36,3 @@ mypy:
 hadolint:
 	hadolint Dockerfile
 
-build:
-	docker build -t myapp .
